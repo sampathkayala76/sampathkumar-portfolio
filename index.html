@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Portfolio</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+    }
+
+    #welcome-heading {
+      font-size: 4rem;
+      margin-top: 50px;
+      color: #fff;
+      text-shadow: 3px 3px 12px rgba(0,0,0,0.4);
+      text-align: center;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      text-align: center;
+      padding:  0;
+      font-size: 0.9rem;
+      background-color: rgba(0,0,0,0.4);
+      color: #fff;
+      font-weight: bold;
+      box-shadow: 0 -3px 10px rgba(0,0,0,0.2);
+      z-index: 1;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      flex-wrap: wrap;
+    }
+
+    .buttons button {
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      background: linear-gradient(45deg, #00f2fe, #4facfe);
+      color: #fff;
+      font-weight: bold;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+    }
+
+    .buttons button:hover {
+      transform: translateY(-5px) scale(1.1);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      background-position: 100% 50%;
+    }
+
+    section {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      padding: 50px 20px;
+      box-sizing: border-box;
+    }
+
+    .side-heading {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 2rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+
+    .back-btn {
+      position: absolute;
+      top: 20px;
+      left: 30px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 20px;
+      background-color: #ffffff;
+      color: #0077b6;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background-color: #0077b6;
+      color: #fff;
+      transform: scale(1.05);
+    }
+
+    .panel-content {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: contentFadeIn 0.6s forwards;
+    }
+
+    @keyframes contentFadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .panel-content:nth-child(1) { animation-delay: 0.2s; }
+    .panel-content:nth-child(2) { animation-delay: 0.4s; }
+    .panel-content:nth-child(3) { animation-delay: 0.6s; }
+    .panel-content:nth-child(4) { animation-delay: 0.8s; }
+    .panel-content:nth-child(5) { animation-delay: 1s; }
+    .panel-content:nth-child(6) { animation-delay: 1.2s; }
+    .panel-content:nth-child(7) { animation-delay: 1.4s; }
+    .panel-content:nth-child(8) { animation-delay: 1.6s; }
+    .panel-content:nth-child(9) { animation-delay: 1.8s; }
+    .panel-content:nth-child(10) { animation-delay: 2s; }
+
+    /* Profile Photo Circular & Resizable */
+    .profile-photo {
+      width: 350px;
+      height: 350px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid #ffeb3b;
+      margin: 40px auto;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+
+    .profile-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: inherit;
+      transition: transform 0.3s ease;
+      transform: scale(1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 30px;
+      color: #fff;
+    }
+
+    th, td { padding: 12px 10px; border-bottom: 1px solid #fff; }
+    th { background-color: rgba(0,0,0,0.3); color: #fff; font-size: 1.1rem; font-weight: bold; text-align:center; }
+    tr:nth-child(even) { background-color: rgba(255,255,255,0.1); }
+    tr:hover { background-color: rgba(255,255,255,0.2); }
+
+    #about-panel h1 { text-align:center; font-size:3rem; color:#ffd700; font-family:'Georgia, serif'; margin-bottom:20px; text-shadow: 2px 2px 10px rgba(0,0,0,0.4);}
+    #about-panel h2 { font-family:'Tahoma, Geneva, sans-serif'; color:#ffeb3b; }
+
+    .hobbies-list { text-align: center; list-style-position: inside; padding: 0; }
+    .hobbies-list li { margin: 15px 0; font-size: 1.5rem; }
+
+    .skills-container, .projects-container { display:flex; flex-direction:column; gap:20px; max-width:700px; margin:0 auto; }
+    .skill-box, .project-box { background: rgba(0,0,0,0.3); border-radius:15px; padding:20px; box-shadow:0 6px 15px rgba(0,0,0,0.4); transition: transform 0.3s, box-shadow 0.3s; }
+    .skill-box:hover, .project-box:hover { transform: translateY(-5px) scale(1.05); box-shadow:0 10px 25px rgba(0,0,0,0.5); }
+    .skill-box h2, .project-box h2 { margin-bottom:10px; color:#ffeb3b; }
+    .skill-box ul, .project-box ul { list-style:disc; padding-left:20px; }
+    .project-box ul li { margin-bottom:10px; line-height:1.5; }
+
+    .projects-heading, .contact-heading { text-align:center; font-size:2.5rem; margin-bottom:30px; text-shadow:2px 2px 8px rgba(0,0,0,0.4); }
+    .projects-heading { color:#fff; }
+    .contact-heading { color:#ff4500; }
+
+    .contact-section a { color:#00ffe0; font-weight:bold; text-decoration:none; font-size:1.1rem; transition: all 0.3s ease; }
+    .contact-section a:hover { color:#ffeb3b; text-decoration:underline; }
+
+    .reference-box { margin:50px auto 0 auto; padding:20px; border:2px solid #00ffcc; border-radius:15px; width:fit-content; text-align:center; font-weight:bold; color:#00ffcc; box-shadow:0 6px 15px rgba(0,0,0,0.4); background-color: rgba(0,0,0,0.2);}
+
+    /* Scrolling text behind footer */
+    .scrolling-text {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 23px;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+      background: transparent;
+    }
+
+    .scrolling-text span {
+      display: inline-block;
+      white-space: nowrap;
+      padding-left: 100%;
+      font-size:0.9rem;
+      font-weight: bold;
+      color: rgba(255, 255, 255, 0.6);
+      animation: scrollText 20s linear infinite;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .scrolling-text span:hover {
+      color: #ffeb3b;
+      transform: scale(1.1);
+    }
+
+    @keyframes scrollText {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+  </style>
+</head>
+<body>
+  <h1 id="welcome-heading">WELCOME TO MY PORTFOLIO</h1>
+  <div class="buttons">
+    <button onclick="openAbout()">About</button>
+    <button onclick="openSkills()">Skills</button>
+    <button onclick="openProjects()">Projects</button>
+    <button onclick="openContact()">Contact</button>
+  </div>
+
+  <!-- Footer -->
+  <footer>Thanks for visiting...</footer>
+
+  <!-- Scrolling Text Behind Footer -->
+  <div class="scrolling-text">
+    <span>🌟 Welcome to my portfolio — Explore my skills, projects, and contact information! 🌟</span>
+  </div>
+
+  <!-- About Panel -->
+  <section id="about-panel">
+    <div class="side-heading">ABOUT</div>
+    <button class="back-btn" onclick="closeAbout()">Back</button>
+    <h1 class="panel-content">KAYALA SAMPATH KUMAR</h1>
+    <h2 class="panel-content" style="font-size:30px;"> Objective : </h2>
+    <p class="panel-content" style="text-align:center;font-size:20PX;">To secure a challenging position where I can utilize my skills, grow professionally, and contribute to the success of the organization.</p>
+    <div class="profile-photo panel-content">
+      <img src="kumar.jpg" alt="K. Sampath Kumar Photo" class="zoom-in">
+    </div>
+    <h2 class="panel-content"> EDUCATIONAL BACKGROUND : </h2>
+    <table class="panel-content" style="margin:0 auto; max-width:900px; border-collapse: collapse;">
+      <thead style="background-color:#4facfe; color:rgb(0, 3, 3); font-weight: bold; text-align: center;">
+        <tr>
+          <td>YEAR</td>
+          <td>INSTITUTE AND GROUP</td>
+          <td>PERCENTAGE</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align:center;">2024-2026</td>
+          <td>Master of Computer Applications, BV Raju College, Bhimavaram</td>
+          <td style="text-align:center;">75%</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;">2021-2024</td>
+          <td>Bachelor of Science, MPCS, Sri Aditya Degree College, Bhimavaram</td>
+          <td style="text-align:center;">78%</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;">2019-2021</td>
+          <td>Board of Intermediate Education, Aditya Junior College, Bhimavaram</td>
+          <td style="text-align:center;">84%</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;">2018-2019</td>
+          <td>Board of Secondary Education, Vignan High School, Akividu</td>
+          <td style="text-align:center;">92%</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="panel-content"> PERSONAL DETAILS : </h2>
+    <table class="panel-content" style="margin:0 auto; max-width:600px; text-align:left;">
+      <tbody>
+        <tr><td style="padding:8px; font-weight:bold;">Father's Name</td><td>K. SALMAN RAJU</td></tr>
+        <tr><td style="padding:8px; font-weight:bold;">Date of Birth</td><td>10th November, 2003.</td></tr>
+        <tr><td style="padding:8px; font-weight:bold;">Gender</td><td>Male</td></tr>
+        <tr><td style="padding:8px; font-weight:bold;">Civil Status</td><td>UnMarried</td></tr>
+        <tr><td style="padding:8px; font-weight:bold;">Nationality</td><td>INDIAN</td></tr>
+        <tr><td style="padding:8px; font-weight:bold;">Religion</td><td>CHRISTIAN</td></tr>
+      </tbody>
+    </table>
+    <h2 class="panel-content">HOBBIES : </h2>
+    <ul class="hobbies-list">
+      <li>⚽ Watching Sports</li>
+      <li>🖌️ Photo Editing</li>
+      <li>🌐 Internet Browsing</li>
+      <li>♟️ Playing Chess</li>
+    </ul>
+  </section>
+
+  <!-- Skills Panel -->
+  <section id="skills-panel">
+    <div class="side-heading">SKILLS</div>
+    <button class="back-btn" onclick="closeSkills()">Back</button>
+    <div class="skills-container">
+      <div class="skill-box panel-content">
+        <h2>Soft Skills</h2>
+        <ul>
+          <li>Observing Skills</li>
+          <li>Decision Making</li>
+          <li>Multi Tasking</li>
+          <li>Problem Solving</li>
+          <li>Motivating Skills</li>
+        </ul>
+      </div>
+      <div class="skill-box panel-content">
+        <h2>Technical Skills</h2>
+        <ul>
+          <li>C basics</li>
+          <li>Java basics</li>
+          <li>DBMS basics</li>
+          <li>HTML basics</li>
+          <li>CSS basics</li>
+          <li>Python basics</li>
+        </ul>
+      </div>
+      <div class="skill-box panel-content">
+        <h2>Communication Skills</h2>
+        <ul>
+          <li>English (Fluent)</li>
+          <li>Telugu (Fluent)</li>
+          <li>Hindi (Basic)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Panel -->
+  <section id="projects-panel">
+    <div class="side-heading">PROJECTS</div>
+    <button class="back-btn" onclick="closeProjects()">Back</button>
+    <h1 class="projects-heading panel-content">Certifications</h1>
+    <div class="projects-container">
+      <div class="project-box panel-content"><ul>
+        <li>Certified by Mepro Pearson — English Language and Communication Skills</li>
+      </ul></div>
+      <div class="project-box panel-content"><ul>
+        <li>Certified by Cisco — Programming essentials in C</li>
+      </ul></div>
+      <div class="project-box panel-content"><ul>
+        <li>Certified by TRIARIGHT & GLOBAL ONE SERVICES — Internship on Python Full Stack</li>
+      </ul></div>
+      <div class="project-box panel-content"><ul>
+        <li>Certified by PurpleLane Make the Right Choice — Hospital Management System using Java Full Stack</li>
+      </ul></div>
+    </div>
+
+    <h1 class="projects-heading panel-content">Projects</h1>
+    <div class="projects-container">
+      <div class="project-box panel-content"><ul>
+        <li>District Level Science Fair: Electrolysis of Water, Smart Home</li>
+      </ul></div>
+      <div class="project-box panel-content"><ul>
+        <li>Sri Aditya College Science Day: How is Technology Improvising Environment</li>
+      </ul></div>
+      <div class="project-box panel-content"><ul>
+        <li>Community Service Project: Organic Farming</li>
+      </ul></div>
+      <div class="project-box panel-content"><ul>
+        <li>Fresher City Project using Java Full Stack (Java, MySQL, Spring, Maven, HTML, CSS, VS Code, GitHub)</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <!-- Contact Panel -->
+  <section id="contact-panel">
+    <div class="side-heading">CONTACT</div>
+    <button class="back-btn" onclick="closeContact()">Back</button>
+    <h1 class="contact-heading panel-content">MY CONTACT</h1>
+    <table class="contact-section panel-content" style="margin:0 auto; max-width:600px; text-align:left; line-height:2;">
+      <tbody>
+        <tr><td style="padding:8px; font-weight:bold;">&#128222; Mobile Number:</td><td style="padding:8px;"><a href="tel:+918247497393">+91 8247497393</a> |
+  <a href="https://wa.me/918247497393" target="_blank">WhatsApp</a></td></tr>
+        <tr><td style="padding:8px; font-weight:bold;">&#128231; Email ID:</td><td style="padding:8px;"><a href="https://mail.google.com/mail/?view=cm&fs=1&to=sampathkayala76@gmail.com" target="_blank">
+  sampathkayala76@gmail.com
+</a>
+</td></tr><a 
+        <tr><td style="padding:8px; font-weight:bold;">&#128100; LinkedIn:</td><td style="padding:8px;"><a href="https://www.linkedin.com/in/sampath-11846b280" target="_blank">
+      linkedin.com/in/sampath-11846b280
+</td></tr>
+        <tr><td style="padding:8px; font-weight:bold;">&#127970; Location:</td><td style="padding:8px;">Bhimavaram, Andhra Pradesh, India</td></tr>
+      </tbody>
+    </table>
+    <div class="reference-box panel-content">REFERENCE AVAILABLE UPON REQUEST</div>
+  </section>
+
+  <script>
+    function openAbout() { 
+      document.getElementById('welcome-heading').style.display='none';
+      document.querySelector('.buttons').style.display='none';
+      document.body.style.background='#4facfe'; 
+      document.getElementById('about-panel').style.display='block'; 
+    }
+    function openSkills() { 
+      document.getElementById('welcome-heading').style.display='none';
+      document.querySelector('.buttons').style.display='none';
+      document.body.style.background='#43e97b'; 
+      document.getElementById('skills-panel').style.display='block'; 
+    }
+    function openProjects() { 
+      document.getElementById('welcome-heading').style.display='none';
+      document.querySelector('.buttons').style.display='none';
+      document.body.style.background='#f093fb'; 
+      document.getElementById('projects-panel').style.display='block'; 
+    }
+    function openContact() { 
+      document.getElementById('welcome-heading').style.display='none';
+      document.querySelector('.buttons').style.display='none';
+      document.body.style.background='#6a11cb'; 
+      document.getElementById('contact-panel').style.display='block'; 
+    }
+
+    function closeAbout(){ document.getElementById('about-panel').style.display='none'; resetWelcomePage();}
+    function closeSkills(){ document.getElementById('skills-panel').style.display='none'; resetWelcomePage();}
+    function closeProjects(){ document.getElementById('projects-panel').style.display='none'; resetWelcomePage();}
+    function closeContact(){ document.getElementById('contact-panel').style.display='none'; resetWelcomePage();}
+    function resetWelcomePage(){
+      document.getElementById('welcome-heading').style.display='block';
+      document.querySelector('.buttons').style.display='flex';
+      document.body.style.background='linear-gradient(135deg, #4facfe, #00f2fe)';
+    }
+  </script>
+</body>
+</html>
